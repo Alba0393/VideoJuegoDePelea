@@ -1,61 +1,84 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://pe54anxrabvc"]
 
-[ext_resource type="Script" path="res://scripts/fighter.gd" id="1_fighter"]
-[ext_resource type="Script" path="res://scripts/hurtbox.gd" id="2_hurtbox"]
-[ext_resource type="Script" path="res://scripts/hitbox.gd" id="3_hitbox"]
+[ext_resource type="Script" uid="uid://bggatcux3npc6" path="res://scripts/fighter.gd" id="1_fighter"]
+[ext_resource type="Script" uid="uid://dha8n81pclakx" path="res://scripts/hurtbox.gd" id="2_hurtbox"]
+[ext_resource type="Texture2D" uid="uid://cxisc7f3uwj7p" path="res://scenes/Nyx/NYXBoceto.png" id="2_rsphg"]
+[ext_resource type="Script" uid="uid://3x62h4lu83gb" path="res://scripts/hitbox.gd" id="3_hitbox"]
 
 [sub_resource type="RectangleShape2D" id="BodyShape"]
-size = Vector2(44, 100)
+size = Vector2(354.5, 552.75)
 
 [sub_resource type="RectangleShape2D" id="HurtShape"]
-size = Vector2(50, 106)
+size = Vector2(113, 275)
 
 [sub_resource type="RectangleShape2D" id="HitShape"]
-size = Vector2(58, 36)
+size = Vector2(351.5, 327.5)
 
-[node name="Fighter" type="CharacterBody2D"]
+[sub_resource type="Animation" id="Animation_rsphg"]
+resource_name = "Idle"
+length = 6.1
+loop_mode = 1
+
+[sub_resource type="Animation" id="Animation_tlqsq"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_eelhu"]
+_data = {
+&"Idle": SubResource("Animation_rsphg"),
+&"RESET": SubResource("Animation_tlqsq")
+}
+
+[node name="Fighter" type="CharacterBody2D" unique_id=1862257967]
 collision_layer = 2
-collision_mask = 1
 script = ExtResource("1_fighter")
 
-[node name="Body" type="ColorRect" parent="."]
+[node name="Body" type="ColorRect" parent="." unique_id=1758569634]
 visible = false
 offset_left = -22.0
 offset_top = -50.0
 offset_right = 22.0
 offset_bottom = 50.0
-color = Color(0.9, 0.26, 0.3, 1)
 mouse_filter = 2
+color = Color(0.9, 0.26, 0.3, 1)
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=40883844]
 texture_filter = 1
+position = Vector2(0, -42)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_rsphg")
 
-[node name="Slash" type="ColorRect" parent="."]
+[node name="Slash" type="ColorRect" parent="." unique_id=1867909666]
 visible = false
 offset_right = 40.0
 offset_bottom = 40.0
-color = Color(1, 0.95, 0.55, 0.85)
 mouse_filter = 2
+color = Color(1, 0.95, 0.55, 0.85)
 
-[node name="BodyCollision" type="CollisionShape2D" parent="."]
+[node name="BodyCollision" type="CollisionShape2D" parent="." unique_id=1970277707]
+position = Vector2(-5, -47)
 shape = SubResource("BodyShape")
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1795626605]
 collision_layer = 4
 collision_mask = 0
 monitoring = false
 script = ExtResource("2_hurtbox")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1291461660]
+texture_filter = 1
+position = Vector2(0, -131)
 shape = SubResource("HurtShape")
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." unique_id=521561214]
 collision_layer = 8
 collision_mask = 4
 monitoring = false
 monitorable = false
 script = ExtResource("3_hitbox")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(40, -14)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=610350794]
+position = Vector2(-13, 53)
 shape = SubResource("HitShape")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=779424451]
+libraries/ = SubResource("AnimationLibrary_eelhu")

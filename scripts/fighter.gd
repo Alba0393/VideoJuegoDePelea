@@ -139,7 +139,12 @@ func _ready() -> void:
 	body_rect.visible = not use_pixel_art
 	sprite.visible = use_pixel_art
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.scale = Vector2(PixelArt.PIXEL_SCALE, PixelArt.PIXEL_SCALE)
+	
+	if player_index == 1:
+		#Escala reducida para el canvas 752x1417px de nyx
+		sprite.scale = Vector2(0.22, 0.22)
+	else:
+		sprite.scale = Vector2(PixelArt.PIXEL_SCALE, PixelArt.PIXEL_SCALE)
 	slash.visible = false
 
 	_apply_body_color()
@@ -745,8 +750,15 @@ func _current_pose() -> String:
 func _refresh_sprite() -> void:
 	if not use_pixel_art:
 		return
-	sprite.texture = PixelArt.get_texture(_current_pose(), player_index)
-	sprite.flip_h = facing < 0
+		
+	if player_index == 1:
+		#Carga de la imagen de Nyx para el jugador 1
+		sprite.texture = preload("res://scenes/Nyx/NYXBoceto.png")
+	else:
+			#Mantener el generador de codigo para el jugador 2 por ahora
+			sprite.texture = PixelArt.get_texture(_current_pose(), player_index)
+			
+	sprite.flip_h = facing < 0 
 
 
 func _update_visuals() -> void:
