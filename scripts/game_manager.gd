@@ -31,6 +31,9 @@ var _time_left: float = 0.0
 var _round_active: bool = false
 var _match_over: bool = false
 
+## Nivel de IA elegido en el menu. Solo se aplica al empezar un combate nuevo.
+var _ai_difficulty: int = AIBrain.Difficulty.NORMAL
+
 
 func _ready() -> void:
 	p1.opponent = p2
@@ -47,8 +50,27 @@ func _ready() -> void:
 	p1.combo_finished.connect(_on_combo_finished)
 	p2.combo_finished.connect(_on_combo_finished)
 
+	_ai_difficulty = p2.ai_difficulty
+	pause_menu.set_difficulty(_ai_difficulty)
+	pause_menu.difficulty_selected.connect(_on_difficulty_selected)
+	pause_menu.restart_requested.connect(_on_restart_requested)
+
 	hud.setup(rounds_to_win, p1.player_name, p2.player_name)
 	start_match()
+
+
+func _on_difficulty_selected(level: int) -> void:
+	_ai_difficulty = level
+
+
+## Reinicia el combate entero desde cero (wins, ronda y vida).
+func _on_restart_requested() -> void:
+	start_match()
+
+## Aplica el nivel elegido a la IA. Se llama al empezar cada combate.
+func _apply_ai_difficulty() -> void:
+	p2.ai_difficulty = _ai_difficulty
+	p2.set_ai_difficulty(_ai_difficulty)
 
 
 func _process(delta: float) -> void:
@@ -65,6 +87,10 @@ func _process(delta: float) -> void:
 # ===========================================================================
 func start_match() -> void:
 	_wins = [0, 0]
+	_round_number = 1
+	_match_over = false
+	_round_active = false
+	_apply_ai_difficulty()
 	_round_number = 1
 	_match_over = false
 	_round_active = false

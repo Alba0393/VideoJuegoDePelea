@@ -26,97 +26,195 @@ color = Color(0.03, 0.03, 0.06, 0.78)
 
 [node name="Panel" type="ColorRect" parent="Root"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -460.0
-offset_top = -300.0
-offset_right = 460.0
-offset_bottom = 300.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 24.0
+offset_right = -40.0
+offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.10, 0.11, 0.17, 0.98)
 
 [node name="Title" type="Label" parent="Root/Panel"]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 20.0
-offset_right = 880.0
-offset_bottom = 76.0
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 10.0
+offset_right = -24.0
+offset_bottom = 56.0
+grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 0.92, 0.55, 1)
-theme_override_font_sizes/font_size = 46
+theme_override_font_sizes/font_size = 36
 text = "PAUSA"
 horizontal_alignment = 1
 
 [node name="Resume" type="Button" parent="Root/Panel"]
-layout_mode = 0
-offset_left = 360.0
-offset_top = 92.0
-offset_right = 560.0
-offset_bottom = 132.0
-theme_override_font_sizes/font_size = 24
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 62.0
+offset_right = 100.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 22
 text = "Continuar"
 
-[node name="CombosTitle" type="Label" parent="Root/Panel"]
-layout_mode = 0
-offset_left = 340.0
-offset_top = 150.0
-offset_right = 880.0
-offset_bottom = 186.0
-theme_override_colors/font_color = Color(0.7, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 26
-text = "COMBOS DISPONIBLES"
-
-[node name="ComboScroll" type="ScrollContainer" parent="Root/Panel"]
-layout_mode = 0
-offset_left = 340.0
-offset_top = 190.0
-offset_right = 884.0
-offset_bottom = 560.0
-horizontal_scroll_mode = 0
-
-[node name="ComboList" type="VBoxContainer" parent="Root/Panel/ComboScroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
+[node name="Restart" type="Button" parent="Root/Panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 106.0
+offset_right = 100.0
+offset_bottom = 144.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 22
+text = "Reiniciar combate"
 
 [node name="ControlsTitle" type="Label" parent="Root/Panel"]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 150.0
-offset_right = 320.0
-offset_bottom = 186.0
+layout_mode = 1
+anchor_top = 0.25
+anchor_bottom = 0.25
+offset_left = 24.0
+offset_top = 0.0
+offset_right = 300.0
+offset_bottom = 30.0
 theme_override_colors/font_color = Color(0.7, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 22
 text = "CONTROLES"
 
 [node name="Controls" type="Label" parent="Root/Panel"]
-layout_mode = 0
-offset_left = 40.0
-offset_top = 192.0
-offset_right = 320.0
-offset_bottom = 570.0
+layout_mode = 1
+anchor_top = 0.25
+anchor_bottom = 0.78
+offset_left = 24.0
+offset_top = 34.0
+offset_right = 300.0
+offset_bottom = 0.0
 theme_override_colors/font_color = Color(0.82, 0.85, 0.92, 1)
-theme_override_font_sizes/font_size = 16
-text = "JUGADOR 1
-  A / D  mover
-  W  saltar (doble salto)
-  S  agacharse
-  Shift  dash
-  J  ligero   K  medio
-  L  pesado   Ñ  especial
-  Bloquear: dirección
-  OPUESTA al rival
-  (tierra y aire)
+theme_override_font_sizes/font_size = 15
+text = "J1: A/D mover  W saltar(x2)
+    S agachar  Shift dash
+    J ligero  K medio  L pesado
+    Ñ especial
+    Bloquear: direccion opuesta
 
-JUGADOR 2 (IA)
-  Flechas  mover / saltar
-  U  dash
-  I / O / P / [  ataques
+J2 (IA): flechas, U dash
+    I/O/P/[ ataques
 
 COMANDOS
-  Abajo + K  →  Patada baja
-  Adelante + L  →  Embestida"
+    Abajo + K  = Patada baja
+    Adelante + L = Embestida"
 autowrap_mode = 2
+
+[node name="CombosTitle" type="Label" parent="Root/Panel"]
+layout_mode = 1
+anchor_left = 0.34
+anchor_right = 1.0
+anchor_top = 0.25
+anchor_bottom = 0.25
+offset_left = 0.0
+offset_top = 0.0
+offset_right = -24.0
+offset_bottom = 30.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "COMBOS"
+
+[node name="ComboScroll" type="ScrollContainer" parent="Root/Panel"]
+layout_mode = 1
+anchor_left = 0.34
+anchor_right = 1.0
+anchor_top = 0.25
+anchor_bottom = 0.78
+offset_left = 0.0
+offset_top = 34.0
+offset_right = -24.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="ComboCols" type="HBoxContainer" parent="Root/Panel/ComboScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 18
+
+[node name="GroundCol" type="VBoxContainer" parent="Root/Panel/ComboScroll/ComboCols"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="AirCol" type="VBoxContainer" parent="Root/Panel/ComboScroll/ComboCols"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="DifficultyTitle" type="Label" parent="Root/Panel"]
+layout_mode = 1
+anchor_top = 0.78
+anchor_right = 1.0
+anchor_bottom = 0.78
+offset_left = 24.0
+offset_top = 4.0
+offset_right = -24.0
+offset_bottom = 30.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.95, 0.8, 0.35, 1)
+theme_override_font_sizes/font_size = 19
+text = "DIFICULTAD IA  (se aplica en el proximo combate)"
+horizontal_alignment = 1
+
+[node name="DiffRow" type="HBoxContainer" parent="Root/Panel"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.78
+anchor_bottom = 0.78
+offset_left = -210.0
+offset_top = 34.0
+offset_right = 210.0
+offset_bottom = 72.0
+grow_horizontal = 2
+theme_override_constants/separation = 16
+
+[node name="DiffEasy" type="Button" parent="Root/Panel/DiffRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Facil"
+
+[node name="DiffNormal" type="Button" parent="Root/Panel/DiffRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Normal"
+
+[node name="DiffExpert" type="Button" parent="Root/Panel/DiffRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Experto"
+
+[node name="QuitMenu" type="Button" parent="Root/Panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -48.0
+offset_right = 100.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 18
+text = "Salir"

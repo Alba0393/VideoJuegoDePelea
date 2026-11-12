@@ -7,20 +7,6 @@ extends RefCounted
 ## en que un golpe conecta: completar una secuencia da un nombre al combo y un
 ## pequeño bonus de daño al finisher.
 
-## Notación legible de cada movimiento (para el menú de pausa y el HUD).
-const NOTATION := {
-	"light": "Ligero (J)",
-	"medium": "Medio (K)",
-	"heavy": "Pesado (L)",
-	"special": "Especial (Ñ)",
-	"low_kick": "Abajo + Medio (↓+K)",
-	"advancing_blow": "Adelante + Pesado (→+L)",
-	"air_light": "Ligero aéreo (J en aire)",
-	"air_medium": "Medio aéreo (K en aire)",
-	"air_heavy": "Pesado aéreo (L en aire)",
-	"air_special": "Especial aéreo (Ñ en aire)",
-}
-
 ## Notación corta (teclas) para el menú de pausa.
 const NOTATION_SHORT := {
 	"light": "J",
@@ -73,12 +59,6 @@ static func finisher_bonus(recipe: Dictionary) -> float:
 	return clampf(1.0 + 0.06 * n, 1.0, 1.3)
 
 
-## Texto de la secuencia con notación legible, p. ej. "Ligero (J)  →  Medio (K)".
-static func describe_sequence(seq: Array) -> String:
-	var parts := PackedStringArray()
-	for id in seq:
-		parts.append(NOTATION.get(id, String(id)))
-	return "  →  ".join(parts)
 
 
 ## Texto compacto (teclas) para el menú, p. ej. "J · J · K".

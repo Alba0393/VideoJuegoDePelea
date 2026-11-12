@@ -26,11 +26,21 @@ signal combo_finished(fighter)
 enum State { IDLE, WALK, JUMP, CROUCH, DASH, ATTACK, HITSTUN, KO }
 
 # ---------------------------------------------------------------------------
+# Retrato de Nyx
+# ---------------------------------------------------------------------------
+# Nyx es el unico personaje jugable. El jugador y el NPC comparten sprite;
+# lo que los diferencia es quien los controla, no su aspecto.
+const NYX_TEXTURE: Texture2D = preload("res://scenes/Nyx/NYXBoceto.png")
+## Escala reducida para el canvas 752x1417px de Nyx.
+const NYX_SPRITE_SCALE: float = 0.22
+# ---------------------------------------------------------------------------
 # Propiedades exportadas
 # ---------------------------------------------------------------------------
 @export var player_name: String = "JUGADOR 1"
 @export var player_index: int = 1
 @export var is_ai: bool = false
+## Nivel de la IA. Solo se aplica al empezar una ronda nueva.
+@export_enum("Facil", "Normal", "Experto") var ai_difficulty: int = 1
 @export var max_health: float = 100.0
 @export var use_pixel_art: bool = true
 @export var body_color: Color = Color(0.9, 0.26, 0.3, 1.0):
@@ -73,6 +83,11 @@ const ATTACK_POSES := {
 	"air_light": "air_light", "air_medium": "air_medium",
 	"air_heavy": "air_heavy", "air_special": "air_special",
 }
+
+## Cajas de colision por pose (hitboxes y hurtboxes), autoradas con el plugin
+## de editor. Si el recurso es null, el Fighter cae al comportamiento antiguo
+## (una sola caja por movimiento tomada de MoveLibrary).
+@export var pose_boxes: FighterBoxes = null
 
 # ---------------------------------------------------------------------------
 # Estado interno
@@ -140,11 +155,7 @@ func _ready() -> void:
 	sprite.visible = use_pixel_art
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	
-	if player_index == 1:
-		#Escala reducida para el canvas 752x1417px de nyx
-		sprite.scale = Vector2(0.22, 0.22)
-	else:
-		sprite.scale = Vector2(PixelArt.PIXEL_SCALE, PixelArt.PIXEL_SCALE)
+	sprite.scale = Vector2(NYX_SPRITE_SCALE, NYX_SPRITE_SCALE)
 	slash.visible = false
 
 	_apply_body_color()
@@ -198,6 +209,7 @@ func _gather_input(delta: float) -> void:
 	if is_ai:
 		if _ai_brain == null:
 			_ai_brain = AIBrain.new()
+			_ai_brain.set_difficulty(ai_difficulty as AIBrain.Difficulty)
 		var cmd: Dictionary = _ai_brain.think(self, opponent, delta)
 		_move_dir = cmd.get("move_dir", 0.0)
 		_want_jump = cmd.get("jump", false)
@@ -230,7 +242,11 @@ func _pressed(action: String) -> bool:
 
 func _just_pressed(action: String) -> bool:
 	return InputMap.has_action(action) and Input.is_action_just_pressed(action)
-
+## Aplica el nivel de IA. Lo llama el GameManager al empezar un combate nuevo.
+func set_ai_difficulty(level: int) -> void:
+	ai_difficulty = clampi(level, 0, 2)
+	if _ai_brain != null:
+		_ai_brain.set_difficulty(ai_difficulty as AIBrain.Difficulty)
 
 ## Traduce un botón a un id de movimiento según el estado (tierra/aire) y la dirección.
 func _resolve_move(button: String) -> String:
@@ -396,10 +412,41 @@ func _process_attack(delta: float) -> void:
 
 
 func _configure_hitbox(md: MoveData) -> void:
+	# Si la pose tiene hitboxes autoradas, mandan ellas: permiten varias cajas
+	# (puno + pie) y siguen el dibujo. Si no, se usa la caja unica de MoveLibrary.
+	var pose: String = ATTACK_POSES.get(md.id, "")
+	var boxes: Array = pose_boxes.get_hitboxes(pose) if pose_boxes else []
+	if boxes.size() > 0:
+		hitbox.set_boxes(_mirror_boxes(boxes))
+		return
 	var shape := hitbox_collision.shape as RectangleShape2D
 	if shape:
 		shape.size = md.hitbox_size
 	hitbox_collision.position = Vector2(md.hitbox_offset.x * facing, md.hitbox_offset.y)
+
+
+## Aplica a las cajas de colision las de la pose actual.
+func _apply_pose_boxes(pose: String) -> void:
+	if pose_boxes == null:
+		return
+	var hurt: Array = pose_boxes.get_hurtboxes(pose)
+	if hurt.size() > 0:
+		hurtbox.set_boxes(_mirror_boxes(hurt))
+	var hit: Array = pose_boxes.get_hitboxes(pose)
+	if hit.size() > 0 and state != State.ATTACK:
+		hitbox.set_boxes(_mirror_boxes(hit))
+
+
+## Refleja las cajas si el personaje mira a la izquierda.
+## Las cajas se autoran mirando a la derecha, igual que las poses.
+func _mirror_boxes(boxes: Array) -> Array:
+	if facing >= 0:
+		return boxes
+	var out: Array = []
+	for box in boxes:
+		var r: Rect2 = box
+		out.append(Rect2(Vector2(-r.position.x - r.size.x, r.position.y), r.size))
+	return out
 
 
 func _resolve_hit(md: MoveData) -> void:
@@ -751,14 +798,11 @@ func _refresh_sprite() -> void:
 	if not use_pixel_art:
 		return
 		
-	if player_index == 1:
-		#Carga de la imagen de Nyx para el jugador 1
-		sprite.texture = preload("res://scenes/Nyx/NYXBoceto.png")
-	else:
-			#Mantener el generador de codigo para el jugador 2 por ahora
-			sprite.texture = PixelArt.get_texture(_current_pose(), player_index)
-			
-	sprite.flip_h = facing < 0 
+	sprite.texture = NYX_TEXTURE
+	sprite.flip_h = facing < 0
+
+	# Cajas de colision de la pose actual (si hay datos autorados).
+	_apply_pose_boxes(_current_pose())
 
 
 func _update_visuals() -> void:
